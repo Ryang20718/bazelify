@@ -1,5 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_test")
-load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
 # py_runtime(
 #    name = "python3_runtime",
@@ -26,20 +25,9 @@ py_test(
     srcs = ["test.py"],
 )
 
-filegroup(
-    name = "python_requirements",
-    srcs = [
-        "requirements.lock",
-        "requirements.txt",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-compile_pip_requirements(
-    name = "pip_requirements",
-    timeout = "moderate",
-    extra_args = ["--allow-unsafe"],
-    requirements_in = "requirements.txt",
-    requirements_txt = "requirements.lock",
-    tags = ["manual"],
+py_library(
+    name = "python",
+    srcs = ["test.py"],
+    imports = [".."],
+    visibility = ["//:__subpackages__"],
 )

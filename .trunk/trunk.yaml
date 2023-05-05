@@ -7,7 +7,23 @@ plugins:
       ref: v0.0.16
       uri: https://github.com/trunk-io/plugins
 lint:
+  files:
+    - name: python
+      extensions:
+        - py
+      shebangs:
+        - python
+        - python3
+  definitions:
+    - name: gen_python_build_files
+      files: [python]
+      commands:
+        - output: pass_fail
+          success_codes: [0, 1]
+          run: ${workspace}/tools/generate_python_build_files.sh
+          run_linter_from: workspace
   enabled:
+    - gen_python_build_files@SYSTEM
     - buildifier@6.1.0
     - git-diff-check
     - gitleaks@8.16.3
