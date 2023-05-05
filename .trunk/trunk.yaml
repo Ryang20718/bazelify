@@ -1,27 +1,24 @@
 version: 0.1
 cli:
-  version: 1.8.1
+  version: 1.9.1
 plugins:
   sources:
     - id: trunk
       ref: v0.0.16
       uri: https://github.com/trunk-io/plugins
 lint:
-  files:
-    - name: python
-      extensions:
-        - py
-      shebangs:
-        - python
-        - python3
   definitions:
     - name: gen_python_build_files
       files: [python]
       commands:
-        - output: pass_fail
+        - output: regex
+          parse_regex: (ERROR(?P<path>.*):(?P<line>-?\d+):(?P<message>.*))
+          target: .
           success_codes: [0, 1]
           run: ${workspace}/tools/generate_python_build_files.sh
-          run_linter_from: workspace
+          batch: true
+          disable_upstream: true
+          read_output_from: stderr
   enabled:
     - gen_python_build_files@SYSTEM
     - buildifier@6.1.0
@@ -31,6 +28,7 @@ lint:
     - yamllint@1.30.0
     - golangci-lint@1.52.2
     - gofmt@1.20.3
+    # - pyright@1.1.306
 runtimes:
   enabled:
     - go@1.20.3
