@@ -7,8 +7,13 @@ load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 
 # This rule fetches the metadata for python packages we depend on. That data is
 # required for the gazelle_python_manifest rule to update our manifest file.
+
 modules_mapping(
     name = "modules_map",
+    exclude_patterns = [
+        "^_|(\\._)+",  # This is the default.
+        "(\\.tests)+",  # Add a custom one to get rid of the psutil tests.
+    ],
     wheels = all_whl_requirements,
 )
 
@@ -33,6 +38,17 @@ gazelle_python_manifest(
     use_pip_repository_aliases = True,
 )
 
+# Our gazelle target points to the python gazelle binary.
+# This is the simple case where we only need one language supported.
+# If you also had proto, go, or other gazelle-supported languages,
+# you would also need a gazelle_binary rule.
+# See https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.rst#example
+gazelle(
+    name = "gazelle",
+    data = GAZELLE_PYTHON_RUNTIME_DEPS,
+    gazelle = "@rules_python_gazelle_plugin//python:gazelle_binary",
+)
+
 filegroup(
     name = "python_requirements",
     srcs = [
@@ -49,15 +65,4 @@ compile_pip_requirements(
     requirements_in = "requirements.txt",
     requirements_txt = "requirements.lock",
     tags = ["manual"],
-)
-
-# Our gazelle target points to the python gazelle binary.
-# This is the simple case where we only need one language supported.
-# If you also had proto, go, or other gazelle-supported languages,
-# you would also need a gazelle_binary rule.
-# See https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.rst#example
-gazelle(
-    name = "gazelle",
-    data = GAZELLE_PYTHON_RUNTIME_DEPS,
-    gazelle = "@rules_python_gazelle_plugin//python:gazelle_binary",
 )

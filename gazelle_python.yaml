@@ -90,23 +90,6 @@ manifest:
     bs4.diagnose: beautifulsoup4
     bs4.element: beautifulsoup4
     bs4.formatter: beautifulsoup4
-    bs4.tests: beautifulsoup4
-    bs4.tests.test_builder: beautifulsoup4
-    bs4.tests.test_builder_registry: beautifulsoup4
-    bs4.tests.test_css: beautifulsoup4
-    bs4.tests.test_dammit: beautifulsoup4
-    bs4.tests.test_docs: beautifulsoup4
-    bs4.tests.test_element: beautifulsoup4
-    bs4.tests.test_formatter: beautifulsoup4
-    bs4.tests.test_fuzz: beautifulsoup4
-    bs4.tests.test_html5lib: beautifulsoup4
-    bs4.tests.test_htmlparser: beautifulsoup4
-    bs4.tests.test_lxml: beautifulsoup4
-    bs4.tests.test_navigablestring: beautifulsoup4
-    bs4.tests.test_pageelement: beautifulsoup4
-    bs4.tests.test_soup: beautifulsoup4
-    bs4.tests.test_tag: beautifulsoup4
-    bs4.tests.test_tree: beautifulsoup4
     cachetools: cachetools
     cachetools.func: cachetools
     cachetools.keys: cachetools
@@ -138,6 +121,7 @@ manifest:
     dateutil.utils: python_dateutil
     dateutil.zoneinfo: python_dateutil
     dateutil.zoneinfo.rebuild: python_dateutil
+    ezgmail: EZGmail
     frozenlist: frozenlist
     google.api: googleapis_common_protos
     google.api.annotations_pb2: googleapis_common_protos
@@ -353,17 +337,6 @@ manifest:
     googleapiclient.version: google_api_python_client
     googlesearch: google
     h11: h11
-    h11.tests: h11
-    h11.tests.helpers: h11
-    h11.tests.test_against_stdlib_http: h11
-    h11.tests.test_connection: h11
-    h11.tests.test_events: h11
-    h11.tests.test_headers: h11
-    h11.tests.test_helpers: h11
-    h11.tests.test_io: h11
-    h11.tests.test_receivebuffer: h11
-    h11.tests.test_state: h11
-    h11.tests.test_util: h11
     httpcore: httpcore
     httpcore.backends: httpcore
     httpcore.backends.asyncio: httpcore
@@ -714,4 +687,4 @@ manifest:
   pip_repository:
     name: pip
     use_pip_repository_aliases: true
-integrity: 5f8c229bbee0b8b89cd029dc8ed66cfbf21e5df7459f76d2296f117b96665b2b
+integrity: a84be0414f52a12b86c48d1c3c7e059c2451e5f43421ebea5f745cdd7abd4e14

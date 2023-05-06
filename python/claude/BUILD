@@ -6,6 +6,7 @@ py_library(
         "__init__.py",
         "claude.py",
     ],
+    data = [".env"],
     imports = ["../.."],
     visibility = ["//:__subpackages__"],
     deps = [
@@ -20,6 +21,7 @@ py_binary(
     imports = ["../.."],
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
+    deps = [":claude"],
 )
 
 py_test(

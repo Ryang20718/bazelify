@@ -74,26 +74,6 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_python/releases/download/0.21.0/rules_python-0.21.0.tar.gz",
 )
 
-load("@rules_python//python:repositories.bzl", "python_register_toolchains")
-
-python_register_toolchains(
-    name = "python3_10",
-    # Available versions are listed in @rules_python//python:versions.bzl.
-    # We recommend using the same version your team is already standardized on.
-    python_version = "3.10",
-)
-
-load("@python3_10//:defs.bzl", "interpreter")
-load("@rules_python//python:pip.bzl", "pip_parse")
-
-pip_parse(
-    name = "pip",
-    python_interpreter_target = interpreter,
-    requirements_lock = "//:requirements.lock",
-)
-
-load("@pip//:requirements.bzl", "install_deps")
-
 http_archive(
     name = "rules_python_gazelle_plugin",
     sha256 = "94750828b18044533e98a129003b6a68001204038dc4749f40b195b24c38f49f",
@@ -101,12 +81,45 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_python/releases/download/0.21.0/rules_python-0.21.0.tar.gz",
 )
 
-# To compile the rules_python gazelle extension from source,
-# we must fetch some third-party go dependencies that it uses.
+# Next we load the toolchain from rules_python.
+load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 
-load("@rules_python_gazelle_plugin//:deps.bzl", _py_gazelle_deps = "gazelle_deps")
+# We now register a hermetic Python interpreter rather than relying on a system-installed interpreter.
+# This toolchain will allow bazel to download a specific python version, and use that version
+# for compilation.
+python_register_toolchains(
+    name = "python310",
+    python_version = "3.10",
+)
 
-_py_gazelle_deps()
+# Load the interpreter and pip_parse rules.
+load("@python310//:defs.bzl", "interpreter")
+load("@rules_python//python:pip.bzl", "pip_parse")
+
+# This macro wraps the `pip_repository` rule that invokes `pip`, with `incremental` set.
+# Accepts a locked/compiled requirements file and installs the dependencies listed within.
+# Those dependencies become available in a generated `requirements.bzl` file.
+# You can instead check this `requirements.bzl` file into your repo.
+pip_parse(
+    name = "pip",
+    # Generate user friendly alias labels for each dependency that we have.
+    incompatible_generate_aliases = True,
+    python_interpreter_target = interpreter,
+    # Set the location of the lock file.
+    requirements_lock = "//:requirements.lock",
+)
+
+# Load the install_deps macro.
+load("@pip//:requirements.bzl", "install_deps")
 
 # Initialize repositories for all packages in requirements_lock.txt.
 install_deps()
+
+# The rules_python gazelle extension has some third-party go dependencies
+# which we need to fetch in order to compile it.
+load("@rules_python_gazelle_plugin//:deps.bzl", _py_gazelle_deps = "gazelle_deps")
+
+# See: https://github.com/bazelbuild/rules_python/blob/main/gazelle/README.md
+# This rule loads and compiles various go dependencies that running gazelle
+# for python requirements.
+_py_gazelle_deps()
