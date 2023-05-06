@@ -4,3 +4,4 @@ protobuf
 google
 ezgmail
 requests
+python-dotenv

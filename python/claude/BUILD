@@ -11,6 +11,7 @@ py_library(
     visibility = ["//:__subpackages__"],
     deps = [
         "@pip//anthropic",
+        "@pip//python_dotenv",
         "@pip//requests",
     ],
 )

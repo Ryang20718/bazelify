@@ -19,8 +19,27 @@ lint:
           batch: true
           disable_upstream: true
           read_output_from: stderr
+    - name: gen_python_requirements
+      files: [ALL]
+      commands:
+        - output: regex
+          parse_regex: (ERROR(?P<path>.*):(?P<line>-?\d+):(?P<message>.*))
+          target: .
+          success_codes: [0, 1]
+          run: ${workspace}/tools/update_python_deps.sh
+          batch: true
+          disable_upstream: true
+          read_output_from: stderr
+  triggers:
+    - linters:
+        - gen_python_requirements
+      paths:
+        - requirements.txt
+      targets:
+        - requirements.txt
   enabled:
     - gen_python_build_files@SYSTEM
+    - gen_python_requirements@SYSTEM
     - buildifier@6.1.0
     - git-diff-check
     - gitleaks@8.16.3

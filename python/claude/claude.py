@@ -1,6 +1,9 @@
 import requests
 import anthropic
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def claude_api(data: str, question: str) -> str:
     api_key=os.getenv("ANTHROPIC_API_KEY")

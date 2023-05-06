@@ -121,6 +121,13 @@ manifest:
     dateutil.utils: python_dateutil
     dateutil.zoneinfo: python_dateutil
     dateutil.zoneinfo.rebuild: python_dateutil
+    dotenv: python_dotenv
+    dotenv.cli: python_dotenv
+    dotenv.ipython: python_dotenv
+    dotenv.main: python_dotenv
+    dotenv.parser: python_dotenv
+    dotenv.variables: python_dotenv
+    dotenv.version: python_dotenv
     ezgmail: EZGmail
     frozenlist: frozenlist
     google.api: googleapis_common_protos
@@ -687,4 +694,4 @@ manifest:
   pip_repository:
     name: pip
     use_pip_repository_aliases: true
-integrity: a84be0414f52a12b86c48d1c3c7e059c2451e5f43421ebea5f745cdd7abd4e14
+integrity: acd987e61cbd4c056daf2132fc41cd729ed66607c2c27a1aeb21eee25deabab7
