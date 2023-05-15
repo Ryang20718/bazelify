@@ -27,7 +27,10 @@ py_test(
 
 py_library(
     name = "python",
-    srcs = ["test.py"],
+    srcs = [
+        "__init__.py",
+        "test.py",
+    ],
     imports = [".."],
     visibility = ["//:__subpackages__"],
 )

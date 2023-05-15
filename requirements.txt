@@ -2,6 +2,16 @@ simplegmail
 anthropic
 protobuf
 google
+python-Levenshtein
 ezgmail
 requests
 python-dotenv
+mypy
+pdf2image
+pyhtml2pdf
+pytesseract
+Pillow
+torch
+torchvision
+torchaudio
+transformers

@@ -1,2 +1,4 @@
 bazel-*
 .env
+client_secret.json
+gmail_token_symlink.json

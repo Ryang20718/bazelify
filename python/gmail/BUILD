@@ -13,9 +13,20 @@ py_library(
 py_binary(
     name = "gmail_bin",
     srcs = ["__main__.py"],
+    data = [
+        "//:gmail_creds",
+        "@opencv",
+    ],
     imports = ["../.."],
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
+    deps = [
+        "//python/claude",
+        "//python/document_processing",
+        "@pip//levenshtein",
+        "@pip//pyhtml2pdf",
+        "@pip//simplegmail",
+    ],
 )
 
 py_test(

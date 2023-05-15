@@ -1,0 +1,62 @@
+#!/bin/bash -eu
+# Pseudo virtual env environment for trunk
+
+VENV_DIR="${PWD}/bazel-bin/venv"
+VENV_SITE_PACKAGES="${VENV_DIR}/lib/python3/site-packages"
+SHASUM=$(sha256sum requirements.txt|cut -d' ' -f1)
+CACHED_PYTHON_PATH="${VENV_DIR}/.path_${SHASUM}.txt"
+
+
+function clean() {
+    rm -rf "${VENV_DIR}"
+}
+
+function regenerate_venv() { 
+    clean
+    mkdir -p "${VENV_SITE_PACKAGES}"
+    touch "${CACHED_PYTHON_PATH}"
+
+    tempfile=$(mktemp)
+    site_packages_dir=$(cat bazel-bin/python/*/*.runfiles_manifest | cut -d' ' -f2-3 | cut -d'/' -f1-10 | grep pip_ | grep site | sort | uniq > ${tempfile})
+
+    while read file; do
+        file_name=$(basename ${file})
+        parent_dir=$(dirname ${file})
+        # namespace package
+        if [ ${file_name} == "__init__.py" ];then
+            continue
+        fi
+        if [ -d "${VENV_SITE_PACKAGES}/${file_name}" ]; then
+            # namespace pkg
+            if [ -f "${parent_dir}/__init__.py" ]; then
+                if grep -q "namespace" "${parent_dir}/__init__.py"; then
+                    for subfile in "${file}/*"; do
+                        subfile_name=$(basename ${subfile})
+                        ln -sf "${subfile}" "${VENV_SITE_PACKAGES}/${file_name}/${subfile_name}"
+                    done
+                fi
+            fi
+            continue
+        fi
+
+        ln -s "${file}" "${VENV_SITE_PACKAGES}/${file_name}"
+    done < ${tempfile}
+    echo "${PWD}:${VENV_SITE_PACKAGES}" > "${CACHED_PYTHON_PATH}"
+}
+
+
+if [ ! -d bazel-bin/python ]; then
+    tools/bazel build //python/...
+fi
+clean
+if [ ! -f "${CACHED_PYTHON_PATH}" ]; then
+    echo "regenerating venv"
+    regenerate_venv
+fi
+
+PYTHONPATH=$(cat "${CACHED_PYTHON_PATH}")
+export PYTHONPATH=${PYTHONPATH}
+exec bazel-bin/python/pip_requirements.update.runfiles/python3_10_aarch64-apple-darwin/bin/python3.10 "$@"
+
+
+

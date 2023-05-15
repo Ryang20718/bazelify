@@ -1,20 +1,19 @@
-import requests
 import anthropic
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-def claude_api(data: str, question: str) -> str:
+def claude_api(prompt: str) -> str:
     api_key=os.getenv("ANTHROPIC_API_KEY")
     client = anthropic.Client(api_key)
     response = client.completion(
-        prompt=f"{anthropic.HUMAN_PROMPT} {data} {question}?{anthropic.AI_PROMPT}",
+        prompt=f"{anthropic.HUMAN_PROMPT} {prompt}?{anthropic.AI_PROMPT}",
         stop_sequences = [anthropic.HUMAN_PROMPT],
         model="claude-v1",
-        max_tokens_to_sample=3000)
+        max_tokens_to_sample=5000)
 
     if response["exception"] is None:
-        print(response["completion"])
-        return response
+        # print(response["completion"])
+        return response["completion"]
     return ""

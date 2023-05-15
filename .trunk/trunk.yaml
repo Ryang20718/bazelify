@@ -47,7 +47,7 @@ lint:
     - yamllint@1.30.0
     - golangci-lint@1.52.2
     - gofmt@1.20.3
-    # - pyright@1.1.306
+    - ruff@0.0.265
 runtimes:
   enabled:
     - go@1.20.3

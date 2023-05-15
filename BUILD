@@ -66,3 +66,12 @@ compile_pip_requirements(
     requirements_txt = "requirements.lock",
     tags = ["manual"],
 )
+
+filegroup(
+    name = "gmail_creds",
+    srcs = [
+        "client_secret.json",
+        "gmail_token_symlink.json",
+    ],
+    visibility = ["//visibility:public"],
+)

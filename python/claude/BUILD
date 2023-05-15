@@ -12,7 +12,6 @@ py_library(
     deps = [
         "@pip//anthropic",
         "@pip//python_dotenv",
-        "@pip//requests",
     ],
 )
 
