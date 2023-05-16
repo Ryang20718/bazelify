@@ -14,8 +14,8 @@ py_binary(
     name = "gmail_bin",
     srcs = ["__main__.py"],
     data = [
+        "TextExtractionBinaryDarwin",
         "//:gmail_creds",
-        "@opencv",
     ],
     imports = ["../.."],
     main = "__main__.py",

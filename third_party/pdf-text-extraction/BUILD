@@ -2,7 +2,15 @@ load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
 
 filegroup(
     name = "all_srcs",
-    srcs = glob(["**"]),
+    srcs = glob(
+        ["**"],
+        exclude = [
+            "**/.gitignore",
+            ".trunk/.gitignore",
+            "pdfhummus-populate/**/.gitignore",
+            "pdfhummus-populate/.gitignore",
+        ],
+    ),
     visibility = ["//visibility:public"],
 )
 
