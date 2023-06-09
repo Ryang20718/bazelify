@@ -1,0 +1,19 @@
+[package]
+name = "bazelify"
+version = "0.0.0"
+
+[lib]
+path = "lib.rs"
+proc-macro = true
+
+[dependencies]
+pdf-helper = { path = "rust/pdf-helper" }
+
+regex = "1.8.1"
+
+# Steps to add a new dependency from https://crates.io/
+#  1. Run `cargo add <dependency_name>`
+#  2. Run any bazel command with `CARGO_BAZEL_REPIN=1`
+#  3. Add `cargo_crate("<dependency_name>")` to the `deps` of your rust_library/rust_binary.
+#  4. Commit the generated lock-files files (git add Cargo.toml third_party/Cargo.lock third_party/cargo-bazel-lock.json
+

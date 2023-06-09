@@ -13,29 +13,46 @@ load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
 
-BAZEL_ZIG_CC_VERSION = "v1.0.1"
+# BAZEL_ZIG_CC_VERSION = "v1.0.1"
 
+# http_archive(
+#     name = "bazel-zig-cc",
+#     sha256 = "e9f82bfb74b3df5ca0e67f4d4989e7f1f7ce3386c295fd7fda881ab91f83e509",
+#     strip_prefix = "bazel-zig-cc-{}".format(BAZEL_ZIG_CC_VERSION),
+#     urls = [
+#         "https://mirror.bazel.build/github.com/uber/bazel-zig-cc/releases/download/{0}/{0}.tar.gz".format(BAZEL_ZIG_CC_VERSION),
+#         "https://github.com/uber/bazel-zig-cc/releases/download/{0}/{0}.tar.gz".format(BAZEL_ZIG_CC_VERSION),
+#     ],
+# )
+
+# load("@bazel-zig-cc//toolchain:defs.bzl", zig_toolchains = "toolchains")
+
+# zig_toolchains()
+
+# register_toolchains(
+#     "@zig_sdk//toolchain:linux_amd64_gnu.2.19",
+#     "@zig_sdk//toolchain:linux_arm64_gnu.2.28",
+#     "@zig_sdk//toolchain:darwin_amd64",
+#     "@zig_sdk//toolchain:darwin_arm64",
+#     "@zig_sdk//toolchain:windows_amd64",
+#     "@zig_sdk//toolchain:windows_arm64",
+# )
+
+# GCC
 http_archive(
-    name = "bazel-zig-cc",
-    sha256 = "e9f82bfb74b3df5ca0e67f4d4989e7f1f7ce3386c295fd7fda881ab91f83e509",
-    strip_prefix = "bazel-zig-cc-{}".format(BAZEL_ZIG_CC_VERSION),
-    urls = [
-        "https://mirror.bazel.build/github.com/uber/bazel-zig-cc/releases/download/{0}/{0}.tar.gz".format(BAZEL_ZIG_CC_VERSION),
-        "https://github.com/uber/bazel-zig-cc/releases/download/{0}/{0}.tar.gz".format(BAZEL_ZIG_CC_VERSION),
-    ],
+    name = "aspect_gcc_toolchain",
+    sha256 = "3341394b1376fb96a87ac3ca01c582f7f18e7dc5e16e8cf40880a31dd7ac0e1e",
+    strip_prefix = "gcc-toolchain-0.4.2",
+    url = "https://github.com/aspect-build/gcc-toolchain/archive/refs/tags/0.4.2.tar.gz",
 )
 
-load("@bazel-zig-cc//toolchain:defs.bzl", zig_toolchains = "toolchains")
+load("@aspect_gcc_toolchain//toolchain:defs.bzl", "ARCHS", "gcc_register_toolchain")
 
-zig_toolchains()
-
-register_toolchains(
-    "@zig_sdk//toolchain:linux_amd64_gnu.2.19",
-    "@zig_sdk//toolchain:linux_arm64_gnu.2.28",
-    "@zig_sdk//toolchain:darwin_amd64",
-    "@zig_sdk//toolchain:darwin_arm64",
-    "@zig_sdk//toolchain:windows_amd64",
-    "@zig_sdk//toolchain:windows_arm64",
+gcc_register_toolchain(
+    name = "gcc_toolchain_aarch64",
+    gcc_version = "10.3.0",
+    sysroot_variant = "aarch64",
+    target_arch = ARCHS.aarch64,
 )
 
 ### GOLANG ###
@@ -146,3 +163,47 @@ http_archive(
     strip_prefix = "pdf-text-extraction-1.1",
     url = "https://github.com/galkahana/pdf-text-extraction/archive/refs/tags/v1.1.tar.gz",
 )
+
+http_archive(
+    name = "rules_rust",
+    sha256 = "50272c39f20a3a3507cb56dcb5c3b348bda697a7d868708449e2fa6fb893444c",
+    urls = [
+        "https://github.com/bazelbuild/rules_rust/releases/download/0.22.0/rules_rust-v0.22.0.tar.gz",
+    ],
+)
+
+load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_analyzer_toolchain_repository", "rust_register_toolchains")
+
+RUST_VERSION = "1.70.0"
+
+# Adds the necessary dependencies for the Rust rules.
+rules_rust_dependencies()
+
+# Registers Rust toolchains with the given versions and editions.
+rust_register_toolchains(
+    # Specifies the Rust edition to use for the registered toolchains.
+    edition = "2021",
+    versions = [RUST_VERSION],
+)
+
+load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
+load("@rules_rust//tools/rust_analyzer:deps.bzl", "rust_analyzer_dependencies")
+
+rust_analyzer_dependencies()
+
+register_toolchains(rust_analyzer_toolchain_repository(
+    name = "rust_analyzer_toolchain",
+    # This should match the currently registered toolchain.
+    version = "1.70.0",
+))
+
+crates_repository(
+    name = "crate_index",
+    cargo_lockfile = "//:Cargo.lock",
+    lockfile = "//:Cargo.Bazel.lock",
+    manifests = ["//:Cargo.toml"],
+)
+
+load("@crate_index//:defs.bzl", "crate_repositories")
+
+crate_repositories()

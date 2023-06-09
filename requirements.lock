@@ -97,9 +97,9 @@ aiosignal==1.3.1 \
     --hash=sha256:54cd96e15e1649b75d6c87526a6ff0b6c1b0dd3459f43d9ca11d48c339b68cfc \
     --hash=sha256:f8376fb07dd1e86a584e4fcdec80b36b7f81aac666ebc724e2c090300dd83b17
     # via aiohttp
-anthropic==0.2.7 \
-    --hash=sha256:b5d807b54c43ad4812a82b8389412507d62574b06af79c25dc2433233f1ab50f \
-    --hash=sha256:dafdd617c79122bb97bc53634519e8dcba17b7e765a5a2372c77f6e3744127e5
+anthropic==0.2.9 \
+    --hash=sha256:2d44564d362cced6e8e662366e4de7f94dcdc6cb61346a5e528359b0afc1f2f3 \
+    --hash=sha256:e7cce215cf6c446de29280deb31b07b5587993d48e84850eaad3fc69bd1fec0a
     # via -r ./requirements.txt
 anyio==3.6.2 \
     --hash=sha256:25ea0d673ae30af41a0c442f81cf3b38c7e79fdc7b60335a4c14e05eb0947421 \

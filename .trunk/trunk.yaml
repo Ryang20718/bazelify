@@ -30,6 +30,17 @@ lint:
           batch: true
           disable_upstream: true
           read_output_from: stderr
+    # - name: gen_rust_build_files
+    #   files: [rust]
+    #   commands:
+    #     - output: regex
+    #       parse_regex: (ERROR(?P<path>.*):(?P<line>-?\d+):(?P<message>.*))
+    #       target: .
+    #       success_codes: [0, 1]
+    #       run: cargo raze
+    #       batch: true
+    #       disable_upstream: true
+    #       read_output_from: stderr
   triggers:
     - linters:
         - gen_python_requirements

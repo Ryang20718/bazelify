@@ -1,0 +1,17 @@
+{
+  "sysroot": "/private/var/tmp/_bazel_ryang/a371b2b2044b940e1dc5784120fef09f//external/rust_analyzer_1.70.0_tools",
+  "sysroot_src": "/private/var/tmp/_bazel_ryang/a371b2b2044b940e1dc5784120fef09f/external/rust_analyzer_1.70.0_tools/lib/rustlib/src/library",
+  "crates": [
+    {
+      "display_name": "pdf_helper_lib",
+      "root_module": "rust/pdf-helper/main.rs",
+      "edition": "2021",
+      "deps": [],
+      "is_workspace_member": true,
+      "cfg": ["test", "debug_assertions"],
+      "target": "aarch64-apple-darwin",
+      "env": {},
+      "is_proc_macro": false
+    }
+  ]
+}
