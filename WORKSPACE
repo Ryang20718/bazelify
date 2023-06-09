@@ -174,7 +174,7 @@ http_archive(
 
 load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_analyzer_toolchain_repository", "rust_register_toolchains")
 
-RUST_VERSION = "1.70.0"
+RUST_VERSION = "1.68.0"
 
 # Adds the necessary dependencies for the Rust rules.
 rules_rust_dependencies()
@@ -186,7 +186,6 @@ rust_register_toolchains(
     versions = [RUST_VERSION],
 )
 
-load("@rules_rust//crate_universe:defs.bzl", "crates_repository")
 load("@rules_rust//tools/rust_analyzer:deps.bzl", "rust_analyzer_dependencies")
 
 rust_analyzer_dependencies()
@@ -194,16 +193,11 @@ rust_analyzer_dependencies()
 register_toolchains(rust_analyzer_toolchain_repository(
     name = "rust_analyzer_toolchain",
     # This should match the currently registered toolchain.
-    version = "1.70.0",
+    version = "1.68.0",
 ))
 
-crates_repository(
-    name = "crate_index",
-    cargo_lockfile = "//:Cargo.lock",
-    lockfile = "//:Cargo.Bazel.lock",
-    manifests = ["//:Cargo.toml"],
-)
+# Raze
 
-load("@crate_index//:defs.bzl", "crate_repositories")
+load("//cargo:crates.bzl", "raze_fetch_remote_crates")
 
-crate_repositories()
+raze_fetch_remote_crates()

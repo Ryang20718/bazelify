@@ -1,27 +1,22 @@
 # Loads the Rust rules and the `rust_library` and `rust_test` function definitions.
-load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library")
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+load("//cargo:crates.bzl", "all_crate_deps")
 
 # Set the default visibility for the package to be public.
 package(default_visibility = ["//visibility:public"])
 
 # Declares a Rust library target with the given name.
-rust_library(
-    name = "pdf-helper-lib",
+# rust_library(
+#     name = "pdf-helper-lib",
 
-    # Specifies the source files for the library.
-    srcs = ["main.rs"],
-)
+#     # Specifies the source files for the library.
+#     srcs = ["pdf-helper/main.rs"],
+# )
 
 rust_binary(
     name = "pdf-helper",
-    srcs = ["main.rs"],
-    aliases = aliases(),
-    proc_macro_deps = all_crate_deps(
-        proc_macro = True,
-    ),
-    deps = all_crate_deps(
-        normal = True,
-    ),
+    srcs = ["pdf-helper/pdf-helper.rs"],
+    deps = all_crate_deps(),
 )
 # # Declares a Rust test target with the given name.
 # rust_test(

@@ -1,8 +1,13 @@
 [package]
-name = "pdf-helper"
+name = "bazelify"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+path = "fake_lib.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+# to add a crate, cargo add <Crate>
 [dependencies]
+regex = "1.8.1"
